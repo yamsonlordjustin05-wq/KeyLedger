@@ -1290,5 +1290,323 @@ document.addEventListener("DOMContentLoaded", function () {
 <!-- END RANDOM CUSTOMER NAMES -->
 
 
+<!-- MOVE EDIT AND DELETE TO ADMIN PANEL -->
+<style>
+  /* Hide Edit and Delete on the Pending Orders dashboard */
+  #ordersCard button[data-action="edit"],
+  #ordersCard button[data-action="delete"] {
+    display: none !important;
+  }
+
+  /* Admin order management table */
+  .admin-manage-section {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 24px;
+    margin-top: 22px;
+    font-family: Inter, Arial, sans-serif;
+  }
+
+  .admin-manage-header {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .admin-manage-header h2 {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 0 0 6px;
+  }
+
+  .admin-manage-header p {
+    color: #6b7280;
+    font-size: 13px;
+    margin: 0;
+  }
+
+  .admin-refresh {
+    padding: 9px 16px;
+    background: #eff4ff;
+    color: #2563eb;
+    border: 1px solid #dbe7ff;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 13px;
+  }
+
+  .admin-manage-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  .admin-manage-table th {
+    text-align: left;
+    color: #6b7280;
+    font-weight: 400;
+    padding: 14px;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .admin-manage-table td {
+    padding: 15px 14px;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 400;
+  }
+
+  .admin-manage-table .admin-action-cell {
+    white-space: nowrap;
+  }
+
+  .admin-manage-table button {
+    border-radius: 8px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 8px 14px;
+    font: inherit;
+    cursor: pointer;
+    margin-right: 6px;
+  }
+
+  .admin-manage-table .admin-edit:hover {
+    background: #eff6ff;
+    color: #2563eb;
+  }
+
+  .admin-manage-table .admin-delete {
+    color: #dc2626;
+  }
+
+  .admin-manage-table .admin-delete:hover {
+    background: #fef2f2;
+  }
+
+  .admin-manage-scroll {
+    overflow-x: auto;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const adminPage = document.getElementById("keyledgerAdmin");
+  const adminNav = document.getElementById("adminNav");
+
+  if (!adminPage || !adminNav) return;
+
+  const names = {
+    "76561198334393644": "Alexander Morgan",
+    "76561198129974418": "Ethan Carter",
+    "76561198370873689": "Lucas Bennett",
+    "76561198226423728": "Nathan Brooks",
+    "76561199029149754": "Daniel Foster",
+    "76561198159546017": "Oliver Hayes",
+    "76561198054685424": "Ryan Mitchell",
+    "76561197993269828": "James Parker",
+    "76561199647543723": "Adrian Collins",
+    "76561198285234595": "William Scott"
+  };
+
+  const section = document.createElement("div");
+  section.className = "admin-manage-section";
+
+  section.innerHTML = `
+    <div class="admin-manage-header">
+      <div>
+        <h2>Manage Customer Orders</h2>
+        <p>Edit or delete existing customer orders.</p>
+      </div>
+      <button class="admin-refresh" id="adminRefreshOrders">
+        Refresh Orders
+      </button>
+    </div>
+
+    <div class="admin-manage-scroll">
+      <table class="admin-manage-table">
+        <thead>
+          <tr>
+            <th>Customer Name</th>
+            <th>Order No</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="adminManageRows">
+          <tr>
+            <td colspan="5">Loading orders...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  adminPage.appendChild(section);
+
+  const escapeHTML = value =>
+    String(value ?? "").replace(/[&<>"']/g, character => ({
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
+    }[character]));
+
+  let adminOrders = [];
+
+  async function loadAdminOrders() {
+    const tbody = document.getElementById("adminManageRows");
+
+    try {
+      const response = await fetch("/api/orders", {
+        cache: "no-store"
+      });
+
+      if (!response.ok) {
+        throw new Error("Unable to load orders.");
+      }
+
+      adminOrders = await response.json();
+
+      tbody.innerHTML = adminOrders.length
+        ? adminOrders.map(order => `
+          <tr>
+            <td>${escapeHTML(names[order.buyer] || order.buyer)}</td>
+            <td>${escapeHTML(order.id)}</td>
+            <td>${Number(order.quantity).toLocaleString()}</td>
+            <td>${escapeHTML(order.status)}</td>
+            <td class="admin-action-cell">
+              <button class="admin-edit"
+                data-admin-edit="${escapeHTML(order.uid)}">
+                Edit
+              </button>
+              <button class="admin-delete"
+                data-admin-delete="${escapeHTML(order.uid)}">
+                Delete
+              </button>
+            </td>
+          </tr>
+        `).join("")
+        : '<tr><td colspan="5">No orders found.</td></tr>';
+
+    } catch (error) {
+      tbody.innerHTML =
+        `<tr><td colspan="5">${escapeHTML(error.message)}</td></tr>`;
+    }
+  }
+
+  // Open the existing Edit modal for the selected order.
+  function editOrder(uid) {
+    const pendingNav = document.querySelector(
+      '.sidebar [data-page="pending-orders"]'
+    );
+
+    // Show all orders in the original table.
+    pendingNav?.click();
+
+    const search = document.getElementById("topSearch");
+    if (search) {
+      search.value = "";
+      search.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+
+    const allTab = document.querySelector(
+      '#ordersCard .tab[data-view="all"]'
+    );
+
+    allTab?.click();
+
+    const filter = document.getElementById("statusFilter");
+    if (filter) {
+      filter.value = "all";
+      filter.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    const originalButton = Array.from(
+      document.querySelectorAll(
+        '#ordersCard button[data-action="edit"]'
+      )
+    ).find(button => button.dataset.id === uid);
+
+    if (originalButton) {
+      // Return to Admin Panel with the Edit modal open.
+      adminNav.click();
+      originalButton.click();
+    } else {
+      alert("Order not found in the dashboard. Refresh and try again.");
+    }
+  }
+
+  // Permanently delete an order from the database.
+  async function deleteOrder(uid) {
+    const order = adminOrders.find(item => item.uid === uid);
+    if (!order) return;
+
+    if (!confirm(
+      `Permanently delete order ${order.id} and its supply history?`
+    )) return;
+
+    try {
+      const response = await fetch(
+        "/api/orders/" + encodeURIComponent(uid),
+        { method: "DELETE" }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Unable to delete order.");
+      }
+
+      // Reload so the original dashboard and Admin Panel stay in sync.
+      window.location.reload();
+
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
+  section.addEventListener("click", function (event) {
+    const editButton = event.target.closest("[data-admin-edit]");
+    const deleteButton = event.target.closest("[data-admin-delete]");
+
+    if (editButton) {
+      editOrder(editButton.dataset.adminEdit);
+    }
+
+    if (deleteButton) {
+      deleteOrder(deleteButton.dataset.adminDelete);
+    }
+  });
+
+  document.getElementById("adminRefreshOrders")
+    .addEventListener("click", loadAdminOrders);
+
+  adminNav.addEventListener("click", loadAdminOrders);
+
+  // Refresh the management table after closing an order modal.
+  const modal = document.getElementById("modalOverlay");
+
+  if (modal) {
+    new MutationObserver(() => {
+      if (!modal.classList.contains("open")) {
+        loadAdminOrders();
+      }
+    }).observe(modal, {
+      attributes: true,
+      attributeFilter: ["class"]
+    });
+  }
+
+  loadAdminOrders();
+});
+</script>
+<!-- END ADMIN ORDER MANAGEMENT -->
+
+
 </body>
 </html>
