@@ -1,0 +1,1294 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>ONLINE KAWAT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#f6f7f9;
+  --panel:#ffffff;
+  --panel-soft:#fbfbfc;
+  --border:#ececec;
+  --text:#111111;
+  --muted:#737373;
+  --subtle:#a3a3a3;
+  --accent:#1e3a8a;
+  --accent-soft:#eaf0ff;
+  --success:#e9f7e7;
+  --success-text:#2f7d32;
+  --warning:#fdf3ea;
+  --warning-text:#b36b34;
+  --neutral:#f3f4f6;
+  --neutral-text:#52525b;
+  --shadow:0 1px 2px rgba(16,24,40,.04), 0 12px 28px rgba(16,24,40,.04);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{color:inherit;text-decoration:none}
+.app{display:flex;min-height:100vh}
+.sidebar{width:265px;background:#fff;border-right:1px solid var(--border);padding:8px 10px 16px;display:flex;flex-direction:column;gap:8px}
+.agency-card{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--border);border-radius:12px;background:#fafafa;margin-bottom:8px}
+.agency-left{display:flex;align-items:center;gap:10px}
+.agency-icon{width:32px;height:32px;border-radius:10px;background:#e8f3ea;display:grid;place-items:center;border:1px solid #dce8df;font-size:15px}
+.agency-meta small{display:block;color:#8a8a8a;font-size:12px;margin-bottom:3px}
+.agency-meta strong{font-size:14px;font-weight:700}
+.section-label{padding:12px 12px 4px;color:#8f8f97;font-size:12px;font-weight:600}
+.nav-btn{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;color:#2f2f35;font-size:15px;font-weight:500;border:1px solid transparent;background:transparent;width:100%}
+.nav-btn:hover{background:#f7f7f8}
+.nav-btn.active{background:#edf3ff;color:#2145a1}
+.nav-btn .icon{width:18px;text-align:center;color:#8e8e97}
+.nav-indent{padding-left:34px}
+.main{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 18px;border-bottom:1px solid var(--border);background:#fff;position:sticky;top:0;z-index:4}
+.topbar-left{font-size:15px;font-weight:600;color:#333}
+.topbar-right{display:flex;align-items:center;gap:12px}
+.searchbar{display:flex;align-items:center;gap:10px;background:#fafafa;border:1px solid var(--border);border-radius:12px;padding:0 14px;min-width:400px;height:44px}
+.searchbar input{border:0;outline:0;background:transparent;width:100%;color:#222;font-size:15px}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fafafa;display:grid;place-items:center;color:#7b7b84}
+.avatar{width:40px;height:40px;border-radius:12px;object-fit:cover;border:1px solid var(--border);background:linear-gradient(135deg,#e5e7eb,#cfd4dc);display:grid;place-items:center;font-weight:700}
+.content{padding:24px 18px 36px}
+.header-row{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;margin-bottom:18px}
+.header-row h1{margin:0;font-size:38px;letter-spacing:-1.2px}
+.header-row p{margin:8px 0 0;color:#6f6f78;font-size:15px}
+.actions-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{height:46px;padding:0 18px;border-radius:12px;border:1px solid var(--border);background:#fff;color:#1f2937;font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.btn.black{background:#111827;color:#fff;border-color:#111827;box-shadow:0 3px 12px rgba(17,24,39,.18)}
+.btn.soft{background:#fff}
+.utility-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.tag-note{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px 14px;color:#5f6470;font-size:14px}
+.filter-row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.dropdown{height:42px;padding:0 14px;border-radius:12px;border:1px solid var(--border);background:#fff;color:#333;min-width:150px}
+.card{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 18px 0;border-bottom:1px solid var(--border);background:#fff;flex-wrap:wrap}
+.tabs{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.tab{background:transparent;border:0;padding:0 0 14px;font-size:15px;font-weight:500;color:#6f6f78;position:relative}
+.tab.active{color:#111}
+.tab.active::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#4f7cff;border-radius:999px}
+.card-toolbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-bottom:14px}
+.table-wrap{overflow:auto}
+table{width:100%;border-collapse:separate;border-spacing:0}
+thead th{text-align:left;font-size:13px;color:#8a8f98;font-weight:600;padding:16px 18px;background:#fff;white-space:nowrap}
+tbody td{padding:17px 18px;border-top:1px solid var(--border);font-size:14px;vertical-align:middle;white-space:nowrap}
+tbody tr:hover{background:#fcfcfd}
+.checkbox{width:22px}
+.chk{width:20px;height:20px;border-radius:6px;border:1px solid #dadde2;background:#fff;display:inline-block}
+.id-cell{font-weight:800;color:#000;font-size:14px;letter-spacing:.1px}
+.product-cell{display:flex;align-items:center;gap:12px;min-width:240px}
+.product-thumb{width:34px;height:34px;border-radius:10px;background:#0d3259;object-fit:contain;padding:4px}
+.product-name{font-weight:600;color:#1c1c1c}
+.product-sub{font-size:12px;color:#8b8e97;margin-top:2px}
+.status-pill{display:inline-flex;align-items:center;justify-content:center;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.status-pill.pending{background:#fff6df;color:#a36911}
+.status-pill.processing{background:#edf3ff;color:#2858c7}
+.status-pill.completed{background:#eaf7e8;color:#3c8340}
+.status-pill.cancelled{background:#f7eaec;color:#b33f52}
+.money{font-weight:600;color:#1f2937}
+.total-strong{font-weight:800;color:#111827}
+.actions{display:flex;align-items:center;gap:8px}
+.mini-btn{height:34px;padding:0 12px;border-radius:10px;border:1px solid var(--border);background:#fff;color:#1f2937;font-size:13px;font-weight:600}
+.mini-btn.primary{background:#2563eb;border-color:#2563eb;color:#fff}
+.mini-btn.danger{color:#b42318;background:#fff}
+.mini-btn:disabled{opacity:.45;cursor:not-allowed}
+.table-footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 18px;border-top:1px solid var(--border);color:#737782;font-size:13px;flex-wrap:wrap}
+.empty{display:none;padding:50px 20px;text-align:center;color:#70757f}
+.empty h3{margin:10px 0 6px;font-size:20px;color:#1e2330}
+.modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,.5);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal-overlay.open{display:flex}
+.modal{width:min(720px,100%);background:#fff;border-radius:18px;border:1px solid var(--border);box-shadow:0 20px 60px rgba(17,24,39,.20);overflow:hidden}
+.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:20px 22px;border-bottom:1px solid var(--border)}
+.modal-head h2{margin:0;font-size:24px;letter-spacing:-.5px}
+.modal-head p{margin:6px 0 0;color:#6f6f78;font-size:14px}
+.close-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fafafa;font-size:20px;line-height:1}
+.modal-body{padding:20px 22px 22px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field.full{grid-column:1/-1}
+.field label{font-size:13px;font-weight:600;color:#3b4250}
+.field input,.field select,.field textarea{height:46px;border-radius:12px;border:1px solid var(--border);padding:0 14px;outline:0;background:#fff;color:#111}
+.field textarea{height:110px;padding:12px 14px;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:#93c5fd;box-shadow:0 0 0 3px rgba(37,99,235,.10)}
+.notice{margin-top:14px;color:#6f6f78;font-size:13px;line-height:1.55}
+.modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px;flex-wrap:wrap}
+.toast{position:fixed;right:18px;bottom:18px;background:#111827;color:#fff;padding:14px 16px;border-radius:12px;display:none;z-index:12;box-shadow:0 20px 45px rgba(17,24,39,.24)}
+@media (max-width: 1180px) {
+  .searchbar{min-width:280px}
+}
+@media (max-width: 980px) {
+  .sidebar{display:none}
+  .searchbar{min-width:0;width:100%}
+  .topbar{position:static;flex-wrap:wrap}
+  .topbar-right{width:100%}
+  .content{padding:20px 14px 30px}
+  .header-row{flex-direction:column;align-items:flex-start}
+}
+@media (max-width: 720px) {
+  .grid{grid-template-columns:1fr}
+  .header-row h1{font-size:30px}
+  tbody td, thead th{padding:14px 12px}
+  .actions{flex-wrap:wrap}
+}
+
+/* Refined, regular-weight typography */
+body,button,input,select,textarea{font-weight:400}
+.header-row h1{font-weight:600}
+.agency-meta strong,.nav-btn,.topbar-left,.btn,.tab,.dropdown,.field label{font-weight:500}
+.card thead th{font-weight:500;color:#353b45;letter-spacing:.12px}
+.card tbody td{font-weight:400;color:#171b22}
+.card tbody .id-cell{color:#111;font-weight:400}
+.product-name,.money,.total-strong,.table-footer strong{font-weight:500}
+.header-row p,.product-sub,.modal-head p,.notice,.table-footer,.tag-note{font-weight:400}
+.sidebar .nav-btn{gap:0}
+.sidebar .nav-indent{padding-left:22px}
+.agency-icon{font-weight:500;font-size:16px;color:#17548b}
+
+.workspace-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin:18px 0}
+.workspace-stat{background:white;border:1px solid var(--border);border-radius:14px;padding:22px}
+.workspace-stat small{color:var(--muted);font-size:13px}.workspace-stat div{font-size:27px;margin-top:10px;font-weight:500}
+.workspace-panel{background:white;border:1px solid var(--border);border-radius:16px;padding:22px;margin-top:18px;overflow:auto}
+.workspace-panel h2{font-size:18px;font-weight:500;margin:0 0 15px}
+.workspace-page-title{font-size:32px;font-weight:500;margin:0 0 5px}.workspace-description{color:var(--muted);margin:0 0 20px}
+.workspace-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.workspace-actions input,.workspace-actions select{padding:11px;border:1px solid #e3e6ea;border-radius:9px}
+.workspace-actions button{padding:11px 16px;background:#1e3a8a;color:white;border:0;border-radius:9px}
+@media print{.sidebar,.topbar,.workspace-actions,.header-row,.utility-row{display:none!important}.workspace-panel{border:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="agency-card">
+      <div class="agency-left">
+        <div class="agency-icon">K</div>
+        <div class="agency-meta"><small>AGENCY</small><strong>KAWATAN</strong></div>
+      </div>
+      <div style="color:#9a9aa3">⌄</div>
+    </div>
+
+    <button class="nav-btn" data-page="home">Home</button>
+    <button class="nav-btn" data-page="transactions">Transactions</button>
+    <button class="nav-btn active" data-page="pending-orders">Pending Orders</button>
+    <button class="nav-btn nav-indent" data-page="requests">Requests</button>
+    <button class="nav-btn nav-indent" data-page="recipients">Recipients</button>
+    <button class="nav-btn nav-indent" id="logsNav" data-page="logs">Supply Logs</button>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-left">KAWAT LIST</div>
+      <div class="topbar-right">
+        <div class="searchbar"><input id="topSearch" type="text" placeholder="Search order, customer ID, or notes..."></div>
+        <button class="icon-btn" title="Supply history" id="logsTop"></button>
+        <div class="avatar">SHEN</div>
+      </div>
+    </div>
+
+    <div class="content"><div id="workspacePage" style="display:none"></div>
+      <div class="header-row" id="ordersHeader">
+        <div>
+          <h1>Pending Orders</h1>
+          <p></p>
+        </div>
+        <div class="actions-row">
+          <button class="btn soft" id="logsBtn"> Supply History</button>
+          <button class="btn soft" id="backupBtn"> Backup</button>
+          <button class="btn soft" id="exportBtn"> Export</button>
+          <button class="btn black" id="addOrderBtn"> New Order</button>
+        </div>
+      </div>
+
+      <div class="utility-row" id="ordersUtility">
+        <div class="tag-note"><span><strong></strong><strong></strong></span></div>
+        <div class="filter-row">
+          <select id="statusFilter" class="dropdown">
+            <option value="all">All Statuses</option>
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      <section class="card" id="ordersCard">
+        <div class="card-head">
+          <div class="tabs">
+            <button class="tab active" data-view="all">All</button>
+            <button class="tab" data-view="pending">Pending</button>
+            <button class="tab" data-view="processing">Processing</button>
+            <button class="tab" data-view="completed">Completed</button>
+            <button class="tab" data-view="cancelled">Cancelled</button>
+          </div>
+          <div class="card-toolbar">
+            <label for="globalPrice" style="color:#4b5563;font-size:14px">Selling Price per Key (USD)</label>
+            <input id="globalPrice" type="number" min="0" max="1000000" step="0.01" value="3.25" style="width:105px;padding:8px 10px;border:1px solid #d1d5db;border-radius:8px;color:#111;background:#fff;font-size:14px">
+            <button class="mini-btn primary" id="saveGlobalPrice" type="button">Update</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="checkbox"><span class="chk"></span></th>
+                <th>Customer Name</th>
+                <th>Status</th>
+                <th>Items</th>
+                <th>Amount</th>
+                <th>Supplied</th> 
+                <th>Remaining</th>
+                <th>Unit Price</th>
+                <th>Total</th>
+                <th>Order No</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <div class="empty" id="empty">
+            
+            <h3>No matching orders</h3>
+            <p>Try a different search or create a new order.</p>
+          </div>
+        </div>
+        <div class="table-footer">
+          <div id="footerCount">Showing 0 orders</div>
+          <div style="display:flex;gap:18px;flex-wrap:wrap">
+            <span>Active orders: <strong id="pendingCount">0</strong></span>
+            <span>Pending keys: <strong id="keysCount">0</strong></span>
+            <span>Pending value: <strong id="pendingValue">$0.00</strong></span>
+            <span>Completed: <strong id="completedCount">0</strong></span>
+            <span>Keys supplied: <strong id="suppliedCount">0</strong></span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-head">
+      <div>
+        <h2 id="modalTitle">New Order</h2>
+        <p>Add or update a Mann Co. Supply Crate Key order.</p>
+      </div>
+      <button class="close-btn" id="closeModal">×</button>
+    </div>
+    <form id="orderForm" class="modal-body">
+      <div class="grid">
+        <div class="field">
+          <label for="orderId">Order No.</label>
+          <input id="orderId" required maxlength="60" placeholder="ORD-001">
+        </div>
+        <div class="field">
+          <label for="buyer">Customer ID</label>
+          <input id="buyer" required maxlength="100" inputmode="numeric" placeholder="7656119...">
+        </div>
+        <div class="field">
+          <label for="quantity">Amount (keys)</label>
+          <input id="quantity" type="number" min="1" max="1000000" required step="1" placeholder="100">
+        </div>
+        <div class="field">
+          <label for="price">Selling Price per Key (USD)</label>
+          <input id="price" type="number" min="0" step="0.01" value="3.25" readonly title="Change the global price in the toolbar">
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status">
+            <option value="pending">Pending</option>
+            <option value="processing">Processing</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="product">Recipient / Product</label>
+          <input id="product" value="Mann Co. Supply Crate Key" placeholder="Product name">
+        </div>
+        <div class="field full">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Supplier notes, trade details, or any reminder..."></textarea>
+        </div>
+      </div>
+      <div class="notice">Precise total formula: <strong>Amount × Unit Price</strong>. Change the global selling price using <strong>Update All Prices</strong> above the table. Prices in individual orders are synchronized.</div>
+      <div class="modal-actions">
+        <button type="button" class="btn soft" id="cancelModal">Cancel</button>
+        <button type="submit" class="btn black" id="saveBtn">Save Order</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="logsOverlay"><div class="modal" style="max-width:850px"><div class="modal-head"><div><h2>Supply History</h2><p>Every supply is recorded in the database with its timestamp.</p></div><button class="close-btn" id="closeLogs">×</button></div><div class="modal-body"><div class="table-wrap"><table><thead><tr><th>Order</th><th>Customer ID</th><th>Keys supplied</th><th>Time</th></tr></thead><tbody id="logRows"></tbody></table></div></div></div></div>
+<div class="toast" id="toast"></div>
+
+
+<script src="/app.js" defer></script>
+
+
+<!-- ADMIN PANEL - FINAL UPDATE -->
+<style>
+  /* Keep the Pending Orders dashboard clean */
+  #ordersUtility {
+    display: none !important;
+  }
+
+  #ordersHeader .actions-row:empty,
+  #ordersCard .card-toolbar:empty {
+    display: none !important;
+  }
+
+  /* Admin Panel */
+  #keyledgerAdmin {
+    display: none;
+    width: 100%;
+    color: #111827;
+    font-family: Inter, Arial, sans-serif;
+    font-weight: 400;
+  }
+
+  #keyledgerAdmin * {
+    box-sizing: border-box;
+  }
+
+  .admin-heading {
+    margin-bottom: 26px;
+  }
+
+  .admin-heading h1 {
+    font-size: 34px;
+    font-weight: 600;
+    letter-spacing: -1px;
+    margin: 0 0 8px;
+  }
+
+  .admin-heading p {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .admin-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .admin-card {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.025);
+  }
+
+  .admin-card.full {
+    grid-column: 1 / -1;
+  }
+
+  .admin-card h2 {
+    margin: 0 0 7px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #111827;
+  }
+
+  .admin-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #6b7280;
+    margin: 0 0 22px;
+  }
+
+  .admin-controls {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .admin-controls .btn {
+    font-weight: 400;
+    height: 43px;
+  }
+
+  .admin-controls .btn.black {
+    background: #1e3a8a;
+    border-color: #1e3a8a;
+  }
+
+  .admin-controls .btn.black:hover {
+    background: #1d4ed8;
+  }
+
+  .admin-price {
+    display: flex;
+    align-items: end;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .admin-price label {
+    display: block;
+    font-size: 13px !important;
+    color: #374151 !important;
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+
+  .admin-price input {
+    width: 165px !important;
+    height: 44px;
+    padding: 0 13px !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 9px !important;
+    font-size: 14px !important;
+  }
+
+  .admin-price button {
+    height: 44px;
+    padding: 0 20px;
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    border-radius: 9px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  .admin-filter {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .admin-filter select {
+    min-width: 180px;
+    height: 44px;
+    border-radius: 9px;
+  }
+
+  .admin-filter button,
+  .admin-back {
+    height: 44px;
+    padding: 0 18px;
+    background: #1e3a8a;
+    border: 0;
+    color: white;
+    border-radius: 9px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  .admin-divider {
+    height: 1px;
+    background: #eef0f3;
+    margin: 22px 0;
+  }
+
+  .admin-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+
+  .admin-stat {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 13px;
+    padding: 20px;
+  }
+
+  .admin-stat span {
+    display: block;
+    color: #6b7280;
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .admin-stat strong {
+    font-size: 26px;
+    font-weight: 500;
+    color: #1e3a8a;
+  }
+
+  @media (max-width: 900px) {
+    .admin-summary {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .admin-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-card.full {
+      grid-column: auto;
+    }
+  }
+
+  @media (max-width: 500px) {
+    .admin-summary {
+      grid-template-columns: 1fr;
+    }
+
+    .admin-card {
+      padding: 18px;
+    }
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const get = id => document.getElementById(id);
+
+  const content = document.querySelector(".content");
+  const sidebar = document.querySelector(".sidebar");
+
+  if (!content || !sidebar) return;
+
+  // CREATE ADMIN PANEL SIDEBAR BUTTON
+  const sectionLabel = document.createElement("div");
+  sectionLabel.className = "section-label";
+  sectionLabel.textContent = "MANAGEMENT";
+
+  const adminNav = document.createElement("button");
+  adminNav.type = "button";
+  adminNav.className = "nav-btn";
+  adminNav.id = "adminNav";
+  adminNav.textContent = "Admin Panel";
+
+  sidebar.appendChild(sectionLabel);
+  sidebar.appendChild(adminNav);
+
+  // CREATE ADMIN PANEL PAGE
+  const admin = document.createElement("section");
+  admin.id = "keyledgerAdmin";
+
+  admin.innerHTML = `
+    <div class="admin-heading">
+      <h1>Admin Panel</h1>
+      <p>Manage orders, pricing, business records and system settings.</p>
+    </div>
+
+    <div class="admin-summary">
+      <div class="admin-stat">
+        <span>Active Orders</span>
+        <strong id="adminActiveOrders">0</strong>
+      </div>
+
+      <div class="admin-stat">
+        <span>Pending Keys</span>
+        <strong id="adminPendingKeys">0</strong>
+      </div>
+
+      <div class="admin-stat">
+        <span>Pending Value</span>
+        <strong id="adminPendingValue">$0.00</strong>
+      </div>
+
+      <div class="admin-stat">
+        <span>Keys Supplied</span>
+        <strong id="adminSuppliedKeys">0</strong>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+
+      <div class="admin-card full">
+        <h2>Order Management</h2>
+        <p>Create new orders, review supply history and export business records.</p>
+
+        <div class="admin-controls" id="adminOrderButtons"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Global Selling Price</h2>
+        <p>
+          Control the selling price per key for all orders.
+          Updating this value will recalculate existing order totals.
+        </p>
+
+        <div class="admin-price" id="adminPriceControls"></div>
+      </div>
+
+      <div class="admin-card">
+        <h2>Order Status Filter</h2>
+        <p>
+          Select the order status you want to display
+          on the Pending Orders dashboard.
+        </p>
+
+        <div class="admin-filter" id="adminFilterControls">
+          <button type="button" id="adminViewOrders">
+            View Orders
+          </button>
+        </div>
+      </div>
+
+      <div class="admin-card full">
+        <h2>Dashboard Navigation</h2>
+        <p>Return to the Pending Orders dashboard to manage customer orders.</p>
+
+        <button type="button" class="admin-back" id="adminGoBack">
+          Go to Pending Orders
+        </button>
+      </div>
+
+    </div>
+  `;
+
+  // INSERT ADMIN PAGE ABOVE THE PENDING DASHBOARD
+  content.insertBefore(admin, get("ordersHeader"));
+
+  // MOVE MANAGEMENT BUTTONS
+  const buttonContainer = get("adminOrderButtons");
+
+  [
+    "addOrderBtn",
+    "logsBtn",
+    "backupBtn",
+    "exportBtn"
+  ].forEach(id => {
+    const button = get(id);
+
+    if (button) {
+      buttonContainer.appendChild(button);
+    }
+  });
+
+  // MOVE SELLING PRICE CONTROLS
+  const priceContainer = get("adminPriceControls");
+
+  const originalToolbar = get("globalPrice")?.closest(".card-toolbar");
+
+  if (originalToolbar) {
+    const priceLabel = originalToolbar.querySelector(
+      'label[for="globalPrice"]'
+    );
+
+    const priceInput = get("globalPrice");
+    const updateButton = get("saveGlobalPrice");
+
+    const inputGroup = document.createElement("div");
+
+    if (priceLabel) inputGroup.appendChild(priceLabel);
+    if (priceInput) inputGroup.appendChild(priceInput);
+
+    priceContainer.appendChild(inputGroup);
+
+    if (updateButton) {
+      priceContainer.appendChild(updateButton);
+    }
+
+    originalToolbar.remove();
+  }
+
+  // MOVE STATUS FILTER
+  const statusFilter = get("statusFilter");
+
+  if (statusFilter) {
+    get("adminFilterControls").insertBefore(
+      statusFilter,
+      get("adminViewOrders")
+    );
+  }
+
+  // REMOVE EMPTY DASHBOARD BUTTON CONTAINER
+  const oldActions = get("ordersHeader")
+    ?.querySelector(".actions-row");
+
+  if (oldActions) {
+    oldActions.remove();
+  }
+
+  // UPDATE ADMIN STATISTICS FROM EXISTING DASHBOARD
+  const statPairs = [
+    ["pendingCount", "adminActiveOrders"],
+    ["keysCount", "adminPendingKeys"],
+    ["pendingValue", "adminPendingValue"],
+    ["suppliedCount", "adminSuppliedKeys"]
+  ];
+
+  function updateAdminStats() {
+    statPairs.forEach(([sourceId, targetId]) => {
+      const source = get(sourceId);
+      const target = get(targetId);
+
+      if (source && target) {
+        target.textContent = source.textContent;
+      }
+    });
+  }
+
+  const footer = get("ordersCard")?.querySelector(".table-footer");
+
+  if (footer) {
+    const observer = new MutationObserver(updateAdminStats);
+
+    observer.observe(footer, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  updateAdminStats();
+
+  // OPEN ADMIN PANEL
+  function openAdmin() {
+    get("ordersHeader").style.display = "none";
+    get("ordersCard").style.display = "none";
+
+    if (get("workspacePage")) {
+      get("workspacePage").style.display = "none";
+    }
+
+    admin.style.display = "block";
+
+    document.querySelectorAll(".nav-btn")
+      .forEach(btn => btn.classList.remove("active"));
+
+    adminNav.classList.add("active");
+
+    updateAdminStats();
+  }
+
+  // CLOSE ADMIN PANEL
+  function closeAdmin() {
+    admin.style.display = "none";
+    adminNav.classList.remove("active");
+  }
+
+  adminNav.addEventListener("click", openAdmin);
+
+  // LET EXISTING PAGE NAVIGATION CONTINUE WORKING
+  document.querySelectorAll(".sidebar [data-page]")
+    .forEach(button => {
+      button.addEventListener("click", closeAdmin);
+    });
+
+  // RETURN TO PENDING ORDERS
+  function goToOrders() {
+    const pendingNav = document.querySelector(
+      '.sidebar [data-page="pending-orders"]'
+    );
+
+    if (pendingNav) {
+      pendingNav.click();
+    }
+  }
+
+  get("adminGoBack").addEventListener("click", goToOrders);
+  get("adminViewOrders").addEventListener("click", goToOrders);
+
+});
+</script>
+<!-- END ADMIN PANEL UPDATE -->
+
+
+<!-- CUSTOMER TRADE URL HIDE / SHOW FEATURE -->
+<style>
+  .customer-url-heading {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
+  }
+
+  .customer-hide-btn {
+    background: #eff4ff;
+    color: #2563eb;
+    border: 1px solid #dbe7ff;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .customer-hide-btn:hover {
+    background: #dbeafe;
+  }
+
+  .customer-hidden {
+    color: #9ca3af !important;
+    letter-spacing: 2px;
+    user-select: none;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const ordersCard = document.getElementById("ordersCard");
+
+  if (!ordersCard) return;
+
+  const table = ordersCard.querySelector("table");
+  if (!table) return;
+
+  const headings = Array.from(
+    table.querySelectorAll("thead th")
+  );
+
+  const customerColumnIndex = headings.findIndex(th =>
+    /Customer Trade URL|Customer ID/i.test(th.textContent)
+  );
+
+  if (customerColumnIndex === -1) return;
+
+  const customerHeading = headings[customerColumnIndex];
+
+  const originalTitle = customerHeading.textContent.trim();
+
+  customerHeading.textContent = "";
+
+  const headingWrapper = document.createElement("div");
+  headingWrapper.className = "customer-url-heading";
+
+  const headingLabel = document.createElement("span");
+  headingLabel.textContent = originalTitle;
+
+  const hideButton = document.createElement("button");
+  hideButton.type = "button";
+  hideButton.className = "customer-hide-btn";
+  hideButton.textContent = "Hide";
+
+  headingWrapper.appendChild(headingLabel);
+  headingWrapper.appendChild(hideButton);
+  customerHeading.appendChild(headingWrapper);
+
+  let isHidden = false;
+
+  function updateCustomerVisibility() {
+
+    const body = table.querySelector("tbody");
+    if (!body) return;
+
+    const rows = body.querySelectorAll("tr");
+
+    rows.forEach(row => {
+
+      const cell = row.cells[customerColumnIndex];
+
+      if (!cell) return;
+
+      const customerId = cell.querySelector(".id-cell");
+      if (!customerId) return;
+
+      if (isHidden) {
+        customerId.textContent = "•••••••••••••••••";
+        customerId.classList.add("customer-hidden");
+      } else {
+        const original = customerId.dataset.originalCustomerId;
+
+        if (original !== undefined) {
+          customerId.textContent = original;
+        }
+
+        customerId.classList.remove("customer-hidden");
+      }
+
+    });
+
+    hideButton.textContent = isHidden ? "Show" : "Hide";
+  }
+
+  function applyPrivacy() {
+
+    const body = table.querySelector("tbody");
+    if (!body) return;
+
+    const rows = body.querySelectorAll("tr");
+
+    rows.forEach(row => {
+
+      const cell = row.cells[customerColumnIndex];
+
+      if (!cell) return;
+
+      const customerId = cell.querySelector(".id-cell");
+      if (!customerId) return;
+
+      if (!customerId.dataset.originalCustomerId) {
+        customerId.dataset.originalCustomerId =
+          customerId.textContent;
+      }
+
+    });
+
+    updateCustomerVisibility();
+  }
+
+  hideButton.addEventListener("click", function () {
+    isHidden = !isHidden;
+    updateCustomerVisibility();
+  });
+
+  const tableBody = table.querySelector("tbody");
+
+  if (tableBody) {
+    const observer = new MutationObserver(function () {
+      observer.disconnect();
+      applyPrivacy();
+
+      observer.observe(tableBody, {
+        childList: true,
+        subtree: true
+      });
+    });
+
+    observer.observe(tableBody, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  applyPrivacy();
+
+});
+</script>
+<!-- END CUSTOMER TRADE URL HIDE / SHOW FEATURE -->
+
+
+<!-- REMOVE SUPPLIED AND REMAINING COLUMNS -->
+<style>
+  /* Hide Supplied and Remaining columns */
+  #ordersCard table thead th:nth-child(6),
+  #ordersCard table thead th:nth-child(7),
+  #ordersCard table tbody td:nth-child(6),
+  #ordersCard table tbody td:nth-child(7) {
+    display: none !important;
+  }
+</style>
+<!-- END -->
+
+
+<!-- REMOVE KEYS REMAINING COLUMN FROM RECIPIENTS -->
+<style>
+  /* Hide the fourth column on the Recipients page only */
+  #workspacePage:has(.workspace-page-title:first-child)
+  .workspace-panel table:has(th:nth-child(4):last-child)
+  th:nth-child(4),
+  #workspacePage:has(.workspace-page-title:first-child)
+  .workspace-panel table:has(th:nth-child(4):last-child)
+  td:nth-child(4) {
+    display: none !important;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const workspace = document.getElementById("workspacePage");
+  if (!workspace) return;
+
+  function updateRecipientsTable() {
+    const heading = workspace.querySelector(".workspace-page-title");
+    if (!heading || heading.textContent.trim() !== "Recipients") return;
+
+    workspace.querySelectorAll("table").forEach(table => {
+      const headers = Array.from(table.querySelectorAll("thead th"));
+      const index = headers.findIndex(th =>
+        th.textContent.trim() === "Keys remaining"
+      );
+
+      if (index === -1) return;
+
+      table.querySelectorAll("tr").forEach(row => {
+        if (row.children[index]) {
+          row.children[index].style.display = "none";
+        }
+      });
+    });
+  }
+
+  const observer = new MutationObserver(updateRecipientsTable);
+  observer.observe(workspace, { childList: true, subtree: true });
+
+  updateRecipientsTable();
+});
+</script>
+<!-- END RECIPIENTS COLUMN UPDATE -->
+
+
+<!-- SHEN PROFILE LOGO UPDATE -->
+<style>
+  /* Replace default SHEN avatar with custom logo */
+  .topbar .avatar {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px;
+    border-radius: 11px !important;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+    overflow: hidden;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 0 !important;
+  }
+
+  .topbar .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 11px;
+    display: block;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const avatar = document.querySelector(".topbar .avatar");
+
+  if (!avatar) return;
+
+  avatar.innerHTML = "";
+
+  const logo = document.createElement("img");
+  logo.src = "/shen-logo.png";
+  logo.alt = "SHEN Logo";
+  logo.title = "SHEN";
+  logo.loading = "eager";
+
+  logo.onerror = function () {
+    avatar.textContent = "SHEN";
+    avatar.style.fontSize = "12px";
+  };
+
+  avatar.appendChild(logo);
+});
+</script>
+<!-- END SHEN PROFILE LOGO UPDATE -->
+
+
+<!-- KAWATAN AGENCY LOGO UPDATE -->
+<style>
+  .sidebar .agency-icon {
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    border: 1px solid #e5e7eb !important;
+    background: transparent !important;
+    overflow: hidden;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sidebar .agency-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const agencyLogo = document.querySelector(
+    ".sidebar .agency-icon"
+  );
+
+  if (!agencyLogo) return;
+
+  const originalContent = agencyLogo.innerHTML;
+
+  const image = document.createElement("img");
+  image.src = "/kawatan-logo.png";
+  image.alt = "KAWATAN Agency Logo";
+  image.title = "KAWATAN";
+
+  image.onerror = function () {
+    agencyLogo.innerHTML = originalContent;
+  };
+
+  agencyLogo.replaceChildren(image);
+});
+</script>
+<!-- END KAWATAN AGENCY LOGO UPDATE -->
+
+
+<!-- RANDOM CUSTOMER NAMES WITH HIDE / SHOW -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  const customerNames = [
+    "Alexander Morgan",
+    "Ethan Carter",
+    "Lucas Bennett",
+    "Nathan Brooks",
+    "Daniel Foster",
+    "Oliver Hayes",
+    "Ryan Mitchell",
+    "James Parker",
+    "Adrian Collins",
+    "William Scott"
+  ];
+
+  const customerIds = [
+    "76561198334393644",
+    "76561198129974418",
+    "76561198370873689",
+    "76561198226423728",
+    "76561199029149754",
+    "76561198159546017",
+    "76561198054685424",
+    "76561197993269828",
+    "76561199647543723",
+    "76561198285234595"
+  ];
+
+  const nameMap = Object.fromEntries(
+    customerIds.map((id, index) => [
+      id, customerNames[index]
+    ])
+  );
+
+  const ordersCard = document.getElementById("ordersCard");
+  if (!ordersCard) return;
+
+  const tableBody = ordersCard.querySelector("tbody");
+  if (!tableBody) return;
+
+  let namesHidden = false;
+
+  // Find the existing Hide / Show button
+  let hideButton = ordersCard.querySelector(".customer-hide-btn");
+
+  // Restore the button if it was previously removed
+  if (!hideButton) {
+    const heading = Array.from(
+      ordersCard.querySelectorAll("thead th")
+    ).find(th =>
+      /Customer Name|Customer Trade URL|Customer ID/i.test(
+        th.textContent
+      )
+    );
+
+    if (heading) {
+      hideButton = document.createElement("button");
+      hideButton.type = "button";
+      hideButton.className = "customer-hide-btn";
+      heading.appendChild(hideButton);
+    }
+  }
+
+  if (hideButton) {
+    hideButton.style.display = "inline-flex";
+    hideButton.textContent = "Hide";
+  }
+
+  function updateCustomerNames() {
+    tableBody.querySelectorAll("tr").forEach(row => {
+      const cell = row.querySelector(".id-cell");
+      if (!cell) return;
+
+      const id = cell.dataset.customerSteamId ||
+                 cell.dataset.originalCustomerId ||
+                 cell.textContent.trim();
+
+      const name = nameMap[id] ||
+                   (customerNames.includes(id) ? id : null);
+
+      if (!name) return;
+
+      // Keep the original Steam ID for reference
+      if (nameMap[id]) {
+        cell.dataset.customerSteamId = id;
+      }
+
+      // Store the display name for the original privacy feature
+      cell.dataset.originalCustomerId = name;
+
+      if (namesHidden) {
+        cell.textContent = "••••••••••••••••";
+        cell.classList.add("customer-hidden");
+      } else {
+        cell.textContent = name;
+        cell.classList.remove("customer-hidden");
+      }
+    });
+  }
+
+  // Preserve compatibility with the existing Hide / Show feature
+  if (hideButton) {
+    const replacement = hideButton.cloneNode(true);
+    hideButton.replaceWith(replacement);
+    hideButton = replacement;
+
+    hideButton.addEventListener("click", function () {
+      namesHidden = !namesHidden;
+      hideButton.textContent = namesHidden ? "Show" : "Hide";
+      updateCustomerNames();
+    });
+  }
+
+  // Update names when orders are re-rendered
+  const observer = new MutationObserver(() => {
+    observer.disconnect();
+    updateCustomerNames();
+    observer.observe(tableBody, {
+      childList: true
+    });
+  });
+
+  observer.observe(tableBody, {
+    childList: true
+  });
+
+  updateCustomerNames();
+
+});
+</script>
+
+<style>
+  /* Keep Hide / Show visible */
+  #ordersCard .customer-hide-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-left: 12px;
+    padding: 5px 12px;
+    background: #eff4ff;
+    color: #2563eb;
+    border: 1px solid #dbe7ff;
+    border-radius: 7px;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+  }
+
+  #ordersCard .customer-hide-btn:hover {
+    background: #dbeafe;
+  }
+
+  #ordersCard .customer-hidden {
+    color: #9ca3af !important;
+    letter-spacing: 2px;
+    user-select: none;
+  }
+</style>
+<!-- END RANDOM CUSTOMER NAMES -->
+
+
+</body>
+</html>
